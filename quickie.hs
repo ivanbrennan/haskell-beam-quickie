@@ -19,7 +19,7 @@ import Database.Beam (Beamable, C, Columnar, Database, DatabaseSettings, Generic
                       liftIO, modifyTableFields, orderBy_, primaryKey, runInsert,
                       runSelectReturningList, runSelectReturningOne, select,
                       setEntityName, tableLenses, tableModification,
-                      withDbModification)
+                      withDbModification, default_, insertExpressions, pk, val_)
 import Database.Beam.Sqlite (runBeamSqliteDebug)
 import Database.SQLite.Simple (open)
 import Data.Text (Text)
@@ -121,6 +121,37 @@ main = do
     runInsert $
       insert (_shoppingCartUsers shoppingCartDb) $
         insertValues [ james, betty, sam ]
+
+  let addresses = [ Address
+                      default_
+                      (val_ "123 Little Street")
+                      (val_ Nothing)
+                      (val_ "Boston")
+                      (val_ "MA")
+                      (val_ "12345")
+                      (pk james)
+                  , Address
+                      default_
+                      (val_ "222 Main Street")
+                      (val_ (Just "Ste 1"))
+                      (val_ "Houston")
+                      (val_ "TX")
+                      (val_ "8888")
+                      (pk betty)
+                  , Address
+                      default_
+                      (val_ "9999 Residence Ave")
+                      (val_ Nothing)
+                      (val_ "Sugarland")
+                      (val_ "TX")
+                      (val_ "8989")
+                      (pk betty)
+                  ]
+
+  runBeamSqliteDebug putStrLn conn $
+    runInsert $
+      insert (_shoppingCartUserAddresses shoppingCartDb) $
+        insertExpressions addresses
 
   let allUsers = all_ (_shoppingCartUsers shoppingCartDb)
 
