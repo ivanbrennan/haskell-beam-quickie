@@ -129,7 +129,7 @@ main = do
                       (val_ "Boston")
                       (val_ "MA")
                       (val_ "12345")
-                      (pk james)
+                      (val_ (pk james))
                   , Address
                       default_
                       (val_ "222 Main Street")
@@ -137,7 +137,7 @@ main = do
                       (val_ "Houston")
                       (val_ "TX")
                       (val_ "8888")
-                      (pk betty)
+                      (val_ (pk betty))
                   , Address
                       default_
                       (val_ "9999 Residence Ave")
@@ -145,7 +145,7 @@ main = do
                       (val_ "Sugarland")
                       (val_ "TX")
                       (val_ "8989")
-                      (pk betty)
+                      (val_ (pk betty))
                   ]
 
   runBeamSqliteDebug putStrLn conn $
