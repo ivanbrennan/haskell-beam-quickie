@@ -64,6 +64,21 @@ instance Table AddressT where
   primaryKey = AddressId . _addressId
 
 
+data ProductT f = Product
+  { _productId          :: C f Int
+  , _productTitle       :: C f Text
+  , _productDescription :: C f Text
+  , _productPrice       :: C f Int {- Price in cents -}
+  } deriving (Generic, Beamable)
+
+type Product = ProductT Identity
+deriving instance Show Product
+
+instance Table ProductT where
+  data PrimaryKey ProductT f = ProductId (C f Int) deriving (Generic, Beamable)
+  primaryKey = ProductId . _productId
+
+
 User (LensFor userEmail)
      (LensFor userFirstName)
      (LensFor userLastName)
