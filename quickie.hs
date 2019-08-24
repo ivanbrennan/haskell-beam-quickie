@@ -23,6 +23,7 @@ import Database.Beam (Beamable, C, Columnar, Database, DatabaseSettings, Generic
 import Database.Beam.Sqlite (runBeamSqliteDebug)
 import Database.SQLite.Simple (open)
 import Data.Text (Text)
+import Lens.Micro ((^.))
 
 
 data UserT f = User
@@ -152,6 +153,10 @@ main = do
     runInsert $
       insert (_shoppingCartUserAddresses shoppingCartDb) $
         insertExpressions addresses
+
+  addresses' <- runBeamSqliteDebug putStrLn conn $
+                runSelectReturningList $
+                select (all_ (shoppingCartDb ^. shoppingCartUserAddresses))
 
   let allUsers = all_ (_shoppingCartUsers shoppingCartDb)
 
